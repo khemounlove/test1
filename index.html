@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+<title>Mini Accessories - គ្រឿងលំអរ និងសម្រស់ | Premium Store</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  @font-face { font-family: 'Khmer OS Battambang'; src: local('Khmer OS Battambang'), local('KhmerOSBattambang'), local('Battambang'); font-display: swap; }
+  @font-face { font-family: 'Khmer OS Moul Light'; src: local('Khmer OS Moul Light'), local('KhmerOSMoulLight'); font-display: swap; }
+  * { font-family: 'Khmer OS Battambang', 'DM Sans', sans-serif; }
+  body { background: linear-gradient(135deg, #FF9EBB 0%, #FFB7C5 50%, #FF9EBB 100%); min-height: 100vh; }
+  .khmer-text { font-family: 'Khmer OS Battambang', sans-serif !important; }
+  .khmer-title { font-family: 'Khmer OS Moul Light', 'Playfair Display', serif !important; }
+  .bi { display: inline-flex; align-items: center; justify-content: center; vertical-align: middle; }
+  
+  .badge-sale-percent { position: absolute; top: 8px; left: 8px; background: linear-gradient(135deg, #ff4444 0%, #cc0000 100%); color: white; font-size: 0.75rem; font-weight: 800; padding: 4px 10px; border-radius: 20px; z-index: 2; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+  .badge-new { position: absolute; top: 8px; left: 8px; background: linear-gradient(135deg, #ffc628 0%, #b8942a 100%); color: white; font-size: 0.6rem; font-weight: 700; padding: 2px 6px; border-radius: 4px; z-index: 2; }
+  .badge-discount-detail { background: linear-gradient(135deg, #ff4444 0%, #cc0000 100%); color: white; border-radius: 20px; padding: 4px 12px; font-size: 0.7rem; font-weight: 700; }
+  
+  .modal-fullscreen { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.96); backdrop-filter: blur(16px); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 0; }
+  .modal-fullscreen .modal-container { background: white; width: 100%; height: 100%; max-width: 100%; max-height: 100%; overflow-y: auto; border-radius: 0; }
+  @media (min-width: 768px) { .modal-fullscreen { padding: 16px; } .modal-fullscreen .modal-container { height: auto; max-height: 95vh; max-width: 750px; border-radius: 32px; } }
+  
+  .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 2000; background: #1f2937; color: white; padding: 0.5rem 1.25rem; border-radius: 9999px; font-size: 0.875rem; white-space: nowrap; }
+  @media (max-width: 480px) { .toast { white-space: normal; width: 90%; text-align: center; } }
+  
+  .product-card { transition: transform 0.3s ease, box-shadow 0.3s ease; position: relative; overflow: hidden; }
+  .product-card:hover { transform: translateY(-1px); box-shadow: 0 25px 35px -12px rgba(0,0,0,0.25); }
+  .product-card::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); transition: left 0.5s ease; z-index: 1; pointer-events: none; }
+  .product-card:hover::before { left: 100%; }
+  
+  .loading-spinner { display: inline-block; width: 40px; height: 40px; border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: white; animation: spin 1s ease-in-out infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .skeleton-card { background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 1rem; height: 280px; }
+  @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+  
+  .required:after { content: " *"; color: red; font-weight: bold; }
+  .required-hint { color: #ef4444; font-size: 11px; margin-top: 4px; display: block; }
+  .step-dot { width: 32px; height: 32px; font-size: 12px; }
+  @media (max-width: 480px) { .step-dot { width: 28px; height: 28px; font-size: 10px; } .step-text { font-size: 9px; } }
+  
+  .confirmation-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 3000; display: flex; align-items: center; justify-content: center; }
+  .confirmation-dialog { background: white; border-radius: 24px; padding: 24px; max-width: 320px; width: 90%; text-align: center; }
+  
+  .fullscreen-image { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.95); z-index: 4000; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+  .fullscreen-image img { max-width: 95%; max-height: 95%; object-fit: contain; }
+  
+  .float-animation { animation: float 3s ease-in-out infinite; }
+  @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+  .gradient-text { background: linear-gradient(135deg, #fff 0%, #ffe0e6 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  
+  button { touch-action: manipulation; min-height: 44px; min-width: 44px; }
+  .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  
+  .alert-message {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3000;
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+    padding: 16px 24px;
+    border-radius: 16px;
+    box-shadow: 0 20px 35px -10px rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    animation: slideDown 0.5s ease;
+    max-width: 90%;
+    width: 500px;
+  }
+  @keyframes slideDown {
+    from { top: -100px; opacity: 0; }
+    to { top: 20px; opacity: 1; }
+  }
+</style>
+</head>
+<body>
+
+<div id="app">
+  <header class="bg-white/25 backdrop-blur-md sticky top-0 z-50 border-b border-white/30 px-4 py-3 flex justify-between items-center">
+    <div class="flex items-center gap-2"><div class="khmer-title text-white text-xl font-black">🌸Mini Accessories</div></div>
+    <div class="flex gap-2">
+      <button @click="showWishlist = true" class="bg-white/30 rounded-full w-10 h-10 flex items-center justify-center text-white relative hover:bg-white/40">
+        <i class="bi bi-heart"></i><span v-if="wishlist.length" class="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center">{{ wishlist.length }}</span>
+      </button>
+      <button @click="openCheckoutFullscreen()" class="bg-white text-pink-400 rounded-full px-4 py-2 flex items-center gap-2 font-bold text-sm shadow-md">
+        <i class="bi bi-cart3"></i><span v-if="cartTotalQty > 0" class="bg-pink-400 text-white rounded-full px-2 py-0.5 text-xs">{{ cartTotalQty }}</span>
+      </button>
+    </div>
+  </header>
+
+  <div class="text-center py-10 px-4">
+    <div class="float-animation inline-block"><i class="bi bi-flower2 text-white text-5xl mb-3 block"></i></div>
+    <h1 class="khmer-title text-white text-2xl md:text-3xl gradient-text">🌸 MINI ACCESSORIES 🌸</h1>
+    <p class="text-white/90 mt-2 khmer-text">គ្រឿង Accessory ដែលជ្រើសរើសបានច្រើនប្រភេទសម្រាប់ប្រើប្រចាំថ្ងៃ</p>
+  </div>
+
+  <div class="max-w-6xl mx-auto px-4 pb-5 flex gap-3 flex-wrap">
+    <div class="flex-1 relative"><i class="bi bi-search absolute left-4 top-1/2 -translate-y-1/2 text-white/80"></i><input type="text" v-model="searchQuery" @input="onSearchInput" placeholder="ស្វែងរកផលិតផល..." class="w-full bg-white/30 backdrop-blur-sm border border-white/50 rounded-full py-3 pl-10 pr-4 text-white placeholder-white/80 outline-none text-sm khmer-text"></div>
+    <select v-model="sortBy" @change="onSortChange" class="bg-white/70 backdrop-blur-sm border border-white/50 rounded-full py-3 px-4 text-sm khmer-text"><option value="default">⭐ លក្ខណៈពិសេស</option><option value="price-asc">💰 តម្លៃ: ទាបទៅខ្ពស់</option><option value="price-desc">💰 តម្លៃ: ខ្ពស់ទៅទាប</option></select>
+  </div>
+
+  <div class="max-w-6xl mx-auto px-4 pb-12">
+    <div class="flex justify-between mb-5"><h2 class="khmer-title text-white text-2xl">🌸ផលិតផលទាំងអស់</h2><span class="text-white/70 text-sm"><i class="bi bi-grid-3x3-gap-fill"></i> {{ displayedProducts.length }} មុខ</span></div>
+    <div v-if="isLoading" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"><div v-for="n in 8" :key="n" class="skeleton-card"></div></div>
+    <div v-else class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+      <div v-for="product in displayedProducts" :key="product.id" class="product-card bg-white rounded-2xl overflow-hidden cursor-pointer shadow-md hover:shadow-xl">
+        <div class="relative">
+          <div v-if="product.sale && product.oldPrice" class="badge-sale-percent khmer-text">-{{ Math.round(((product.oldPrice - product.price) / product.oldPrice) * 100) }}%</div>
+          <div v-else-if="product.isNew" class="badge-new khmer-text">ថ្មីៗ</div>
+          <button @click.stop="toggleWishlist(product)" class="absolute top-2 right-2 bg-white/95 rounded-full w-8 h-8 flex items-center justify-center shadow-md hover:scale-110 z-10"><i :class="isInWishlist(product.id) ? 'bi bi-heart-fill text-red-500' : 'bi bi-heart text-pink-400'"></i></button>
+          <div @click="openProductDetail(product)" class="aspect-square bg-pink-50 overflow-hidden"><img :src="product.image" class="w-full h-full object-cover hover:scale-110 transition duration-500" @error="e=>e.target.src='https://placehold.co/300x300/FF9EBB/white?text=🌸'"></div>
+        </div>
+        <div class="p-3">
+          <div class="flex items-center gap-1 mb-1"><i class="bi bi-tag-fill text-pink-400 text-xs"></i><div class="text-pink-500 text-xs font-bold uppercase">{{ product.category }}</div></div>
+          <div class="khmer-title font-bold text-gray-800 text-sm line-clamp-2">{{ product.name }}</div>
+          <div class="flex items-center gap-1 my-1"><div class="flex gap-0.5"><i v-for="s in 5" :key="s" class="bi bi-star-fill text-xs" :class="s <= Math.round(product.rating) ? 'text-amber-400' : 'text-gray-300'"></i></div><span class="text-xs text-gray-400">({{ product.rating }})</span></div>
+          <div class="flex justify-between items-center mt-2"><span class="font-bold text-pink-500 text-lg">${{ formatPrice(product.price) }}</span><button @click.stop="addToCart(product)" class="bg-pink-400 text-white text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1"><i class="bi bi-cart-plus"></i> ទិញ</button></div>
+        </div>
+      </div>
+    </div>
+    <div v-if="filteredProducts.length > visibleCount" class="text-center mt-8"><button @click="loadMore" :disabled="isLoadingMore" class="bg-white/20 backdrop-blur-sm border border-white/50 text-white px-8 py-3 rounded-full font-semibold inline-flex items-center gap-2"><i v-if="!isLoadingMore" class="bi bi-arrow-down-circle"></i><div v-if="isLoadingMore" class="loading-spinner" style="width:20px;height:20px;border-width:2px"></div><span>{{ isLoadingMore ? 'កំពុងផ្ទុក...' : 'បង្ហាញច្រើនទៀត...' }}</span></button></div>
+    <div v-if="filteredProducts.length === 0 && !isLoading" class="text-center text-white py-12"><i class="bi bi-emoji-frown text-4xl mb-2 block"></i>រកមិនឃើញផលិតផល</div>
+  </div>
+
+  <!-- CHECKOUT MODAL -->
+  <div v-if="checkoutActive" class="modal-fullscreen" @click.self="closeCheckout"><div class="modal-container"><div class="sticky top-0 bg-white z-20 p-4 flex justify-between border-b-2 border-pink-300"><button @click="closeCheckout" class="bg-pink-400 text-white px-4 py-2 rounded-full text-sm"><i class="bi bi-x-lg"></i> បិទ</button><h2 class="khmer-title text-pink-500 text-lg"><i class="bi bi-cart-check"></i> ការទូទាត់</h2><div class="w-16"></div></div>
+    <div class="p-5 pb-8">
+      <div class="relative flex justify-between mb-8"><div class="absolute top-4 left-0 right-0 h-0.5 bg-gray-200"></div><div class="absolute top-4 left-0 h-0.5 bg-green-500 transition-all" :style="{ width: stepWidth }"></div><div v-for="(step, idx) in ['កន្ត្រក','ព័ត៌មាន','បង់ប្រាក់','រួចរាល់']" :key="idx" class="relative z-10 text-center flex-1" :class="{'text-pink-500 font-bold':currentStep>=idx+1,'text-green-600':currentStep>idx+1}"><div class="step-dot rounded-full bg-gray-100 mx-auto mb-1 flex items-center justify-center text-xs font-bold" :class="{'bg-pink-500 text-white':currentStep>=idx+1&&currentStep<=idx+1,'bg-green-600 text-white':currentStep>idx+1}">{{ idx+1 }}</div><div class="step-text text-[10px] sm:text-xs">{{ step }}</div></div></div>
+      <div v-if="currentStep===1"><div v-if="cart.length===0" class="text-center py-16 text-gray-500"><i class="bi bi-cart-x text-5xl block mb-3"></i>កន្ត្រកទទេ</div><div v-else><div v-for="(item,idx) in cart" :key="idx" class="flex items-center gap-3 bg-pink-50 p-3 rounded-2xl mb-3"><img :src="item.image" class="w-14 h-14 rounded-xl object-cover"><div class="flex-1"><div class="font-bold text-base">{{ item.name }}</div><div class="text-sm text-pink-500">${{ formatPrice(item.price) }} x {{ item.qty }}</div></div><div class="flex items-center gap-2"><button @click="updateCartQty(item,-1)" class="w-8 h-8 rounded-full bg-white border border-pink-300"><i class="bi bi-dash"></i></button><span class="w-8 text-center font-semibold">{{ item.qty }}</span><button @click="updateCartQty(item,1)" class="w-8 h-8 rounded-full bg-white border border-pink-300"><i class="bi bi-plus"></i></button></div><button @click="confirmRemoveFromCart(item)" class="bg-red-500 text-white w-8 h-8 rounded-full"><i class="bi bi-trash3"></i></button></div><div class="bg-pink-50 p-5 rounded-2xl mt-4"><div class="flex justify-between font-bold text-xl"><span>សរុប</span><span class="text-pink-500">${{ formatPrice(cartTotal) }}</span></div></div><button @click="currentStep=2" class="w-full bg-amber-400 text-white font-bold py-3 rounded-full mt-5 text-lg"><i class="bi bi-arrow-right-circle"></i> បន្ត</button></div></div>
+      <div v-if="currentStep===2">
+        <div class="space-y-4">
+          <div><label class="text-sm font-semibold text-blue-600 required"><i class="bi bi-person"></i> ឈ្មោះពេញ</label><input type="text" v-model="checkoutForm.name" @blur="validateField('name')" :class="['w-full border rounded-full p-3', errors.name?'border-red-500':'border-pink-200']" placeholder="បញ្ចូលឈ្មោះពេញ"><span v-if="errors.name" class="required-hint">{{ errors.name }}</span></div>
+          <div><label class="text-sm font-semibold text-blue-600 required"><i class="bi bi-telephone"></i> លេខទូរស័ព្ទ </label><input type="tel" v-model="checkoutForm.phone" @blur="validateField('phone')" :class="['w-full border rounded-full p-3', errors.phone?'border-red-500':'border-pink-200']" placeholder="01211022"><span v-if="errors.phone" class="required-hint">{{ errors.phone }}</span></div>
+          <div><label class="text-sm font-semibold text-blue-600 required"><i class="bi bi-telegram"></i> Telegram ID / @username</label><input type="text" v-model="checkoutForm.telegram" @blur="validateField('telegram')" :class="['w-full border rounded-full p-3', errors.telegram?'border-red-500':'border-pink-200']" placeholder="@username"><span v-if="errors.telegram" class="required-hint">{{ errors.telegram }}</span></div>
+          <div><label class="text-sm font-semibold text-blue-600 required"><i class="bi bi-geo-alt"></i> អាសយដ្ឋាន </label><textarea rows="3" v-model="checkoutForm.address" @blur="validateField('address')" :class="['w-full border rounded-2xl p-3', errors.address?'border-red-500':'border-pink-200']" placeholder="ផ្លូវ, ស្រុក/ខណ្ឌ, ខេត្ត"></textarea><span v-if="errors.address" class="required-hint">{{ errors.address }}</span></div>
+          <div><label class="text-sm font-semibold text-blue-600"><i class="bi bi-pencil-square"></i> កំណត់ចំណាំ</label><textarea rows="1" v-model="checkoutForm.notes" class="w-full border border-pink-200 rounded-2xl p-3" placeholder="សារអំណោយ ឬសំណើពិសេស"></textarea></div>
+        </div>
+        <div class="flex gap-3 mt-4"><button @click="currentStep=1" class="bg-gray-200 text-gray-700 px-6 py-2 rounded-full text-sm"><i class="bi bi-arrow-left"></i> ត្រឡប់</button><button @click="validateAndProceed" class="flex-1 bg-amber-400 text-white font-bold py-2 rounded-full text-lg">បន្ត <i class="bi bi-arrow-right"></i></button></div>
+      </div>
+      <div v-if="currentStep===3"><div class="bg-pink-50 rounded-2xl p-5 text-center"><h3 class="font-bold text-xl khmer-title"><i class="bi bi-credit-card"></i> ការទូទាត់</h3><img class="w-40 mx-auto my-4 rounded-xl shadow-md" src="images/qr.png"><p class="font-bold text-lg">ចំនួនទឹកប្រាក់: <span class="text-pink-500">${{ formatPrice(cartTotal) }}</span></p><p class="text-sm text-gray-500"><i class="bi bi-bank2"></i> ABA / Wing / KHQR<br>គណនី: CHRUN LEAKHENA</p><div class="text-2xl font-black text-red-500 my-3"><i class="bi bi-hourglass-split"></i> {{ paymentTimer }}</div><div @click="triggerUpload" class="border-2 border-dashed border-pink-300 rounded-2xl p-4 cursor-pointer bg-white hover:bg-pink-50"><i class="bi bi-cloud-upload text-pink-400 text-2xl"></i><br><span class="text-sm">ចុចដើម្បីភ្ជាប់វិក្កយបត្រ</span><br><input type="file" ref="paymentInput" @change="handlePaymentUpload" accept="image/*" class="hidden"><span v-if="uploadedFileName" class="text-xs block mt-2 text-green-600"><i class="bi bi-paperclip"></i> {{ uploadedFileName }}</span><img v-if="uploadPreview" :src="uploadPreview" class="w-20 mx-auto mt-3 rounded-lg shadow"></div><p class="text-xs text-gray-400 mt-3">បន្ទាប់ពីស្កេនរួច សូមបញ្ជាក់ការបញ្ជាទិញ</p></div><div class="flex gap-3 mt-5"><button @click="currentStep=2" class="bg-gray-200 text-gray-700 px-6 py-2 rounded-full text-sm"><i class="bi bi-arrow-left"></i> ត្រឡប់</button><button @click="confirmPaymentAndSendTelegram" :disabled="isSendingOrder" class="flex-1 bg-[#0088cc] text-white font-bold py-2 rounded-full text-lg flex items-center justify-center gap-2"><div v-if="isSendingOrder" class="loading-spinner" style="width:20px;height:20px;border-width:2px"></div><span v-else><i class="bi bi-check-lg"></i> បញ្ជាក់</span><span v-if="isSendingOrder">កំពុងផ្ញើ...</span></button></div></div>
+      <div v-if="currentStep===4"><div class="bg-green-50 p-6 rounded-2xl text-center"><i class="bi bi-check-circle-fill text-green-600 text-5xl"></i><h3 class="khmer-title text-2xl mt-3">🎉 ការបញ្ជាទិញបានបញ្ជាក់!</h3><p class="text-base mt-3"><strong>លេខបញ្ជាទិញ #:</strong> {{ lastOrderNumber }}</p><p class="text-base"><strong>អតិថិជន:</strong> {{ receiptName }}</p><p class="text-base"><strong>ចំនួនទឹកប្រាក់:</strong> ${{ formatPrice(lastOrderTotal) }}</p><p class="text-base"><strong>ស្ថានភាព:</strong> កំពុងដំណើរការ <i class="bi bi-truck"></i></p><hr class="my-4"><p class="text-sm">ព័ត៌មាននឹងត្រូវបានផ្ញើទៅម្ចាស់ហាង</p></div><button @click="continueShoppingAfterOrder" class="w-full bg-green-600 text-white font-bold py-3 rounded-full mt-5 text-lg"><i class="bi bi-shop"></i> បន្តទិញ</button></div></div></div></div>
+
+  <!-- WISHLIST MODAL -->
+  <div v-if="showWishlist" class="modal-fullscreen" @click.self="showWishlist=false"><div class="modal-container" style="max-width:550px"><div class="sticky top-0 bg-white rounded-t-3xl border-b-2 border-pink-300 p-4 flex justify-between"><h2 class="khmer-title text-pink-500 text-xl"><i class="bi bi-heart-fill"></i> ការចូលចិត្ត</h2><button @click="showWishlist=false" class="text-2xl text-gray-500">&times;</button></div><div class="p-5"><div v-if="wishlist.length===0" class="text-center py-10 text-gray-500"><i class="bi bi-emoji-smile text-4xl block mb-2"></i>ការចូលចិត្តទទេ</div><div v-for="item in wishlist" :key="item.id" class="flex items-center gap-3 bg-pink-50 p-3 rounded-2xl mb-3"><img :src="item.image" class="w-14 h-14 rounded-xl object-cover"><div class="flex-1"><div class="font-bold text-base">{{ item.name }}</div><div class="text-pink-500 text-sm">${{ formatPrice(item.price) }}</div></div><button @click="addToCart(item); showWishlist=false" class="bg-pink-400 text-white px-3 py-1.5 rounded-full text-sm"><i class="bi bi-cart-plus"></i> ទិញ</button><button @click="confirmRemoveFromWishlist(item)" class="bg-red-500 text-white w-8 h-8 rounded-full"><i class="bi bi-trash3"></i></button></div></div></div></div>
+
+  <!-- PRODUCT DETAIL MODAL -->
+  <div v-if="selectedProduct" class="fixed inset-0 bg-black/95 backdrop-blur-md z-50 flex items-center justify-center p-0 md:p-4" @click.self="selectedProduct=null">
+    <div class="bg-white w-full h-full md:max-w-md md:h-auto md:rounded-3xl overflow-y-auto">
+      <div class="sticky top-0 bg-white z-10 border-b border-pink-100 px-4 py-3 flex justify-between items-center">
+        <button @click="toggleWishlist(selectedProduct)" class="bg-pink-100 w-10 h-10 rounded-full flex items-center justify-center text-lg"><i :class="isInWishlist(selectedProduct.id) ? 'bi bi-heart-fill text-red-500' : 'bi bi-heart text-pink-500'"></i></button>
+        <h3 class="khmer-title text-pink-500 text-base font-bold text-center line-clamp-1 px-2">{{ selectedProduct.name }}</h3>
+        <button @click="selectedProduct=null" class="text-gray-400 w-10 h-10 rounded-full text-2xl"><i class="bi bi-x-lg"></i></button>
+      </div>
+      <div class="bg-pink-50 p-4 flex justify-center"><img :src="selectedProduct.image" @click="showFullscreenImage=true" class="w-full max-w-[280px] h-auto rounded-2xl object-contain cursor-pointer" @error="e=>e.target.src='https://placehold.co/300x300/FF9EBB/white?text=🌸'"></div>
+      <div class="p-5 pt-3">
+        <div v-if="selectedProduct.sale && selectedProduct.oldPrice" class="mb-3 flex justify-center"><span class="badge-discount-detail inline-block px-3 py-1.5 rounded-full text-sm font-bold">សន្សំ {{ Math.round(((selectedProduct.oldPrice - selectedProduct.price) / selectedProduct.oldPrice) * 100) }}% OFF</span></div>
+        <p class="text-gray-600 text-sm leading-relaxed khmer-text text-center">{{ selectedProduct.description }}</p>
+        <div class="flex justify-center items-center gap-2 mt-4"><div class="flex gap-1"><i v-for="s in 5" :key="s" class="bi bi-star-fill text-xl" :class="s <= Math.round(selectedProduct.rating) ? 'text-amber-400' : 'text-gray-300'"></i></div><span class="text-gray-500 text-sm">({{ selectedProduct.rating }} / 5)</span></div>
+        <div class="flex items-center justify-center gap-3 mt-4"><span class="text-2xl font-bold text-pink-500">${{ formatPrice(selectedProduct.price) }}</span><span v-if="selectedProduct.oldPrice" class="text-gray-400 text-sm line-through">${{ formatPrice(selectedProduct.oldPrice) }}</span></div>
+        
+        <div class="mt-6 border-t border-pink-100 pt-4">
+          <h4 class="khmer-title text-pink-500 text-md mb-3"><i class="bi bi-chat-dots"></i> មតិអតិថិជន ({{ selectedProduct.comments?.length || 0 }})</h4>
+          <div v-if="selectedProduct.comments && selectedProduct.comments.length" class="space-y-3 max-h-48 overflow-y-auto mb-3">
+            <div v-for="(comment, ci) in selectedProduct.comments" :key="ci" class="bg-gray-50 rounded-xl p-3">
+              <div class="flex items-center gap-2 mb-1"><div class="flex gap-0.5"><i v-for="r in 5" :key="r" class="bi bi-star-fill text-xs" :class="r <= comment.rating ? 'text-amber-400' : 'text-gray-300'"></i></div><span class="text-xs text-gray-500">{{ comment.name }}</span></div>
+              <p class="text-sm text-gray-600 khmer-text">{{ comment.text }}</p><p class="text-xs text-gray-400 mt-1">{{ comment.date }}</p>
+            </div>
+          </div>
+          <div v-else class="text-center text-gray-400 text-sm py-2 khmer-text">នៅមិនទាន់មានមតិទេ។</div>
+          <div class="mt-3 bg-pink-50 rounded-xl p-3">
+            <div class="flex gap-2 mb-2"><div class="flex gap-1"><i v-for="r in 5" :key="r" class="bi bi-star-fill text-lg cursor-pointer transition hover:scale-110" :class="r <= newCommentRating ? 'text-amber-400' : 'text-gray-300'" @click="newCommentRating=r"></i></div></div>
+            <input type="text" v-model="newCommentName" placeholder="ឈ្មោះរបស់អ្នក" class="w-full border border-pink-200 rounded-full p-2 text-sm mb-2 khmer-text">
+            <textarea v-model="newCommentText" rows="2" placeholder="សរសេរមតិរបស់អ្នក..." class="w-full border border-pink-200 rounded-xl p-2 text-sm khmer-text"></textarea>
+            <button @click="addComment" class="mt-2 bg-pink-400 text-white px-4 py-2 rounded-full text-sm w-full">ផ្ញើមតិ <i class="bi bi-send"></i></button>
+          </div>
+        </div>
+        
+        <div class="flex items-center justify-center gap-6 my-6"><button @click="detailQty = Math.max(1, detailQty-1)" class="w-12 h-12 rounded-full bg-gray-100 text-2xl font-bold"><i class="bi bi-dash-lg"></i></button><span class="font-bold text-3xl min-w-[60px] text-center">{{ detailQty }}</span><button @click="detailQty++" class="w-12 h-12 rounded-full bg-gray-100 text-2xl font-bold"><i class="bi bi-plus-lg"></i></button></div>
+        <button @click="addToCart(selectedProduct, detailQty); selectedProduct=null" class="w-full bg-gradient-to-r from-pink-500 to-pink-400 text-white font-bold py-4 rounded-2xl text-lg shadow-lg"><i class="bi bi-cart-check"></i> + ទិញឥឡូវនេះ</button>
+      </div>
+    </div>
+  </div>
+
+  <div v-if="showFullscreenImage" class="fullscreen-image" @click="showFullscreenImage=false"><img :src="selectedProduct?.image" alt="Fullscreen"></div>
+  <div v-if="confirmationDialog.show" class="confirmation-overlay"><div class="confirmation-dialog"><i class="bi bi-question-circle text-4xl text-pink-500 mb-3 block"></i><p class="khmer-text text-gray-700 mb-5">{{ confirmationDialog.message }}</p><div class="flex gap-3"><button @click="confirmationDialog.resolve(false)" class="flex-1 bg-gray-200 py-2 rounded-full">ទេ</button><button @click="confirmationDialog.resolve(true)" class="flex-1 bg-pink-500 text-white py-2 rounded-full">បាទ</button></div></div></div>
+  <div v-if="toastMessage" class="toast flex items-center gap-2"><i class="bi bi-info-circle-fill"></i><span>{{ toastMessage }}</span></div>
+
+<footer class="mt-12 bg-gradient-to-r from-pink-600/30 to-rose-500/30 backdrop-blur-md rounded-t-3xl shadow-xl">
+  <div class="max-w-6xl mx-auto px-5 py-8">
+    <!-- Social Icons with Animation -->
+    <div class="flex justify-center gap-4 mb-8">
+      <a href=" https://www.facebook.com/miniaccessories123" class="social-icon w-12 h-12 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center text-white text-xl hover:bg-pink-500 hover:scale-110 hover:rotate-6 transition-all duration-300 shadow-md">
+        <i class="bi bi-facebook"></i>
+      </a>
+      <a href="https://www.instagram.com/miniaccessories123/" class="social-icon w-12 h-12 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center text-white text-xl hover:bg-pink-500 hover:scale-110 hover:-rotate-6 transition-all duration-300 shadow-md">
+        <i class="bi bi-instagram"></i>
+      </a>
+      <a href="https://t.me/miniaccessries" class="social-icon w-12 h-12 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center text-white text-xl hover:bg-pink-500 hover:scale-110 hover:rotate-3 transition-all duration-300 shadow-md">
+        <i class="bi bi-telegram"></i>
+      </a>
+      <a href="https://tiktok.com/@miniaccessories1" class="social-icon w-12 h-12 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center text-white text-xl hover:bg-pink-500 hover:scale-110 hover:-rotate-3 transition-all duration-300 shadow-md">
+        <i class="bi bi-tiktok"></i>
+      </a>
+    </div>
+    
+    <!-- Divider -->
+    <div class="relative mb-6">
+      <div class="absolute inset-0 flex items-center">
+        <div class="w-full border-t border-white/20"></div>
+      </div>
+      <div class="relative flex justify-center">
+        <span class="bg-gradient-to-r from-pink-600/30 to-rose-500/30 px-4 py-1 rounded-full text-white/60 text-xs">
+          <i class="bi bi-suit-heart-fill text-pink-300 text-xs"></i> Follow Us
+        </span>
+      </div>
+    </div>
+    
+    <!-- Contact Info Cards -->
+    <div class="grid grid-cols-1 gap-3 mb-6">
+      <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-3 flex items-center justify-between hover:bg-white/20 transition-all duration-300">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-pink-500/30 rounded-full flex items-center justify-center">
+            <i class="bi bi-telephone-fill text-white text-sm"></i>
+          </div>
+          <div class="text-left">
+            <p class="text-white/60 text-[10px] uppercase tracking-wider">ទូរស័ព្ទ</p>
+            <p class="text-white font-semibold text-sm">061 937 991</p>
+          </div>
+        </div>
+        <button onclick="window.location.href='tel:061937991'" class="bg-white/20 rounded-full px-3 py-1.5 text-white text-xs hover:bg-pink-500 transition-all">
+          <i class="bi bi-telephone"></i> ហៅទូរស័ព្ទ
+        </button>
+      </div>
+      
+      <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-3 flex items-center justify-between hover:bg-white/20 transition-all duration-300">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-pink-500/30 rounded-full flex items-center justify-center">
+            <i class="bi bi-envelope-fill text-white text-sm"></i>
+          </div>
+          <div class="text-left">
+            <p class="text-white/60 text-[10px] uppercase tracking-wider">អ៊ីមែល</p>
+            <p class="text-white font-semibold text-xs">miniaccessories@gmail.com</p>
+          </div>
+        </div>
+        <button onclick="window.location.href='mailto:miniaccessories@gmail.com'" class="bg-white/20 rounded-full px-3 py-1.5 text-white text-xs hover:bg-pink-500 transition-all">
+          <i class="bi bi-envelope"></i> ផ្ញើអ៊ីមែល
+        </button>
+      </div>
+      
+      <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-3 flex items-center justify-between hover:bg-white/20 transition-all duration-300">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-pink-500/30 rounded-full flex items-center justify-center">
+            <i class="bi bi-geo-alt-fill text-white text-sm"></i>
+          </div>
+          <div class="text-left">
+            <p class="text-white/60 text-[10px] uppercase tracking-wider">ទីតាំង</p>
+            <p class="text-white font-semibold text-xs">ភ្នំពេញ, កម្ពុជា</p>
+          </div>
+        </div>
+        <button onclick="window.open('https://www.google.com/maps/place/Rent+Room/@11.5759407,104.8745479,19z/data=!4m15!1m8!3m7!1s0x310951917428d75d:0xf01591ebb62c8b73!2s%23787+Street+1978,+Phnom+Penh!3b1!8m2!3d11.5759407!4d104.8757656!16s%2Fg%2F11xvly6y2k!3m5!1s0x310951007fb875bb:0x63b0b70565efa987!8m2!3d11.5762542!4d104.8759597!16s%2Fg%2F11ydpm_cpd?entry=ttu&g_ep=EgoyMDI2MDQyMi4wIKXMDSoASAFQAw%3D%3D','_blank')" class="bg-white/20 rounded-full px-3 py-1.5 text-white text-xs hover:bg-pink-500 transition-all">
+          <i class="bi bi-map"></i> មើលផែនទី
+        </button>
+      </div>
+    </div>
+    
+    <!-- Divider -->
+    <div class="relative mb-6">
+      <div class="absolute inset-0 flex items-center">
+        <div class="w-full border-t border-white/20"></div>
+      </div>
+      <div class="relative flex justify-center">
+        <span class="bg-gradient-to-r from-pink-600/30 to-rose-500/30 px-4 py-1 rounded-full text-white/60 text-xs">
+          <i class="bi bi-shield-check text-pink-300 text-xs"></i> Secure Payment
+        </span>
+      </div>
+    </div>
+        
+    <!-- Payment Methods with Links -->
+    <div class="flex justify-center gap-4 mb-6">
+      <a href="https://play.google.com/store/apps/details?id=com.paygo24.ibank&hl=en" target="_blank" 
+        class="bg-white/10 backdrop-blur-sm rounded-xl px-3 py-2 flex items-center gap-2 hover:bg-pink-500/50 transition-all duration-300 hover:scale-105">
+        <i class="bi bi-bank2 text-white text-lg"></i>
+        <span class="text-white text-xs font-medium">ABA</span>
+      </a>
+      <a href="https://play.google.com/store/apps/details?id=com.wingmoney.wingpay&hl=en" target="_blank" 
+        class="bg-white/10 backdrop-blur-sm rounded-xl px-3 py-2 flex items-center gap-2 hover:bg-pink-500/50 transition-all duration-300 hover:scale-105">
+        <i class="bi bi-credit-card text-white text-lg"></i>
+        <span class="text-white text-xs font-medium">Wing</span>
+      </a>
+      <a href="https://play.google.com/store/apps/details?id=jp.co.soramitsu.bakong&hl=en" target="_blank" 
+        class="bg-white/10 backdrop-blur-sm rounded-xl px-3 py-2 flex items-center gap-2 hover:bg-pink-500/50 transition-all duration-300 hover:scale-105">
+        <i class="bi bi-qr-code text-white text-lg"></i>
+        <span class="text-white text-xs font-medium">KHQR</span>
+      </a>
+    </div>
+    
+    <!-- Copyright -->
+    <div class="text-center">
+      <p class="text-white/70 text-xs mb-1">
+        <i class="bi bi-c-circle"></i> 2026 Mini Accessories
+      </p>
+      <p class="text-white/50 text-[10px]">
+        ការទូទាត់ប្រកបដោយសុវត្ថិភាព | ដឹកជញ្ជូនទូទាំងប្រទេស
+      </p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  /* Additional animations for footer */
+  .social-icon {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .social-icon:hover {
+    transform: translateY(-5px) scale(1.1);
+    background: linear-gradient(135deg, #ec4899, #f43f5e);
+  }
+  
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.7;
+    }
+  }
+  
+  .bg-white\/10:hover {
+    animation: pulse 0.5s ease;
+  }
+</style>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>
+<script type="module">
+  import { PRODUCTS_DATA } from './products.js';
+  
+  document.addEventListener('DOMContentLoaded', () => {
+    const productsWithComments = PRODUCTS_DATA.map(p => ({ ...p, comments: p.comments || [
+      { name: 'សុខា ចន្ថា', rating: 5, text: 'ស្រលាញ់ផលិតផលនេះណាស់! គុណភាពល្អ តម្លៃសមរម្យ', date: '2026-04-20' },
+      { name: 'ធារី សុផល', rating: 4, text: 'ល្អណាស់ ប្រើបានយូរ', date: '2026-04-22' }
+    ] }));
+    
+    new Vue({
+      el: '#app',
+      data: {
+        products: productsWithComments, searchQuery: '', sortBy: 'default',
+        cart: JSON.parse(localStorage.getItem('cart')) || [], wishlist: JSON.parse(localStorage.getItem('wishlist')) || [],
+        showWishlist: false, selectedProduct: null, detailQty: 1, toastMessage: '',
+        checkoutActive: false, currentStep: 1,
+        checkoutForm: { name: '', phone: '', telegram: '', address: '', notes: '' },
+        errors: { name: '', phone: '', telegram: '', address: '' },
+        uploadedFile: null, uploadedFileName: '', uploadPreview: '',
+        paymentTimer: "15:00", timerInterval: null,
+        lastOrderNumber: '', lastOrderTotal: 0, receiptName: '',
+        visibleCount: 12, isLoading: false, isLoadingMore: false, isSendingOrder: false,
+        showFullscreenImage: false, newCommentName: '', newCommentText: '', newCommentRating: 5,
+        confirmationDialog: { show: false, message: '', resolve: null },
+        orderTimers: {},
+        botToken: '8453210535:AAFXMrYAhBhij5qZ6STMirBZNeCsLD50jpQ', chatId: '6444898588'
+      },
+      computed: {
+        filteredProducts() {
+          let list = [...this.products];
+          if (this.searchQuery) { const q = this.searchQuery.toLowerCase(); list = list.filter(p => p.name.toLowerCase().includes(q) || p.category.toLowerCase().includes(q)); }
+          if (this.sortBy === 'price-asc') list.sort((a,b) => a.price - b.price);
+          else if (this.sortBy === 'price-desc') list.sort((a,b) => b.price - a.price);
+          return list;
+        },
+        displayedProducts() { return this.filteredProducts.slice(0, this.visibleCount); },
+        cartTotal() { return this.cart.reduce((s, i) => s + (i.price * i.qty), 0); },
+        cartTotalQty() { return this.cart.reduce((s, i) => s + i.qty, 0); },
+        stepWidth() { return ((this.currentStep - 1) / 3) * 100 + '%'; }
+      },
+      watch: {
+        cart: { deep: true, handler(val) { localStorage.setItem('cart', JSON.stringify(val)); } },
+        wishlist: { deep: true, handler(val) { localStorage.setItem('wishlist', JSON.stringify(val)); } },
+        searchQuery() { this.visibleCount = 12; this.simulateLoading(); },
+        sortBy() { this.visibleCount = 12; this.simulateLoading(); }
+      },
+      methods: {
+        formatPrice(p) { return parseFloat(p).toFixed(2); },
+        simulateLoading() { this.isLoading = true; setTimeout(() => { this.isLoading = false; }, 500); },
+        onSearchInput() { this.simulateLoading(); },
+        onSortChange() { this.simulateLoading(); },
+        async loadMore() { this.isLoadingMore = true; await new Promise(r => setTimeout(r, 800)); this.visibleCount += 12; this.isLoadingMore = false; },
+        isInWishlist(id) { return this.wishlist.some(i => i.id === id); },
+        toggleWishlist(product) {
+          const idx = this.wishlist.findIndex(i => i.id === product.id);
+          idx > -1 ? this.wishlist.splice(idx,1) : this.wishlist.push({...product});
+          this.showToast(idx > -1 ? '❌ ដកចេញ' : '❤️ បានបន្ថែម');
+        },
+        addToCart(product, qty=1) {
+          const existing = this.cart.find(i => i.id === product.id);
+          existing ? existing.qty += qty : this.cart.push({ ...product, qty });
+          this.showToast(` ${product.name} បានបន្ថែម`);
+        },
+        updateCartQty(item, delta) {
+          const newQty = item.qty + delta;
+          newQty <= 0 ? this.confirmRemoveFromCart(item) : item.qty = newQty;
+        },
+        confirmRemoveFromCart(item) {
+          this.confirmationDialog.show = true;
+          this.confirmationDialog.message = `តើអ្នកចង់លុប "${item.name}" ចេញពីកន្ត្រកមែនទេ?`;
+          this.confirmationDialog.resolve = (confirmed) => {
+            if (confirmed) { const idx = this.cart.findIndex(i => i.id === item.id); if (idx > -1) this.cart.splice(idx,1); this.showToast(` បានលុប ${item.name}`); }
+            this.confirmationDialog.show = false;
+          };
+        },
+        confirmRemoveFromWishlist(item) {
+          this.confirmationDialog.show = true;
+          this.confirmationDialog.message = `តើអ្នកចង់លុប "${item.name}" ចេញពីបញ្ជីចូលចិត្តមែនទេ?`;
+          this.confirmationDialog.resolve = (confirmed) => {
+            if (confirmed) { const idx = this.wishlist.findIndex(i => i.id === item.id); if (idx > -1) this.wishlist.splice(idx,1); this.showToast(`បានលុប ${item.name}`); }
+            this.confirmationDialog.show = false;
+          };
+        },
+        openProductDetail(p) { this.selectedProduct = { ...p }; this.detailQty = 1; this.newCommentName = ''; this.newCommentText = ''; this.newCommentRating = 5; },
+        addComment() {
+          if (!this.newCommentName.trim()) { this.showToast('សូមបញ្ចូលឈ្មោះ'); return; }
+          if (!this.newCommentText.trim()) { this.showToast('សូមបញ្ចូលមតិ'); return; }
+          const newComment = { name: this.newCommentName, rating: this.newCommentRating, text: this.newCommentText, date: new Date().toISOString().split('T')[0] };
+          if (!this.selectedProduct.comments) this.selectedProduct.comments = [];
+          this.selectedProduct.comments.unshift(newComment);
+          const productIndex = this.products.findIndex(p => p.id === this.selectedProduct.id);
+          if (productIndex > -1) this.products[productIndex].comments = [...this.selectedProduct.comments];
+          this.showToast('បានបន្ថែមមតិ!');
+          this.newCommentName = ''; this.newCommentText = ''; this.newCommentRating = 5;
+        },
+        showToast(msg) { this.toastMessage = msg; setTimeout(() => { this.toastMessage = ''; }, 2000); },
+        
+        // Update order status with timers
+        updateOrderStatus(orderId, newStatus, statusText) {
+          let orders = JSON.parse(localStorage.getItem('mini_accessories_orders') || '[]');
+          const orderIndex = orders.findIndex(o => o.id === orderId);
+          if (orderIndex > -1) {
+            orders[orderIndex].status = newStatus;
+            localStorage.setItem('mini_accessories_orders', JSON.stringify(orders));
+            this.showToast(`📦 ការបញ្ជាទិញ #${orders[orderIndex].orderNumber} ${statusText}`);
+            
+            // Show popup alert
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'alert-message';
+            let icon = 'bi-check-circle-fill';
+            let message = '';
+            if (newStatus === 'shipped') {
+              icon = 'bi-truck';
+              message = `🚚 ការបញ្ជាទិញ #${orders[orderIndex].orderNumber} កំពុងដឹកជញ្ជូន! សូមរង់ចាំទូរស័ព្ទពីអ្នកបើកបរ!`;
+            } else if (newStatus === 'delivered') {
+              icon = 'bi-check-circle-fill';
+              message = ` ការបញ្ជាទិញ #${orders[orderIndex].orderNumber} បានប្រគល់ដោយជោគជ័យ! សូមអរគុណ!`;
+            }
+            alertDiv.innerHTML = `<i class="bi ${icon} text-2xl"></i><div><div class="font-bold text-lg">${statusText}</div><div class="text-sm opacity-90">${message}</div></div><button onclick="this.parentElement.remove()" class="bg-white/20 rounded-full w-6 h-6 flex items-center justify-center">✕</button>`;
+            document.body.appendChild(alertDiv);
+            setTimeout(() => { if (alertDiv.parentElement) alertDiv.remove(); }, 8000);
+          }
+        },
+        
+        startOrderTimers(order) {
+          // 10 minutes -> Shipped
+          const timer10 = setTimeout(() => {
+            this.updateOrderStatus(order.id, 'shipped', 'កំពុងដឹកជញ្ជូន');
+          }, 10 * 60 * 1000);
+          
+          // 30 minutes -> Delivered
+          const timer30 = setTimeout(() => {
+            this.updateOrderStatus(order.id, 'delivered', 'បានប្រគល់ជូនអតិថិជន');
+          }, 30 * 60 * 1000);
+          
+          this.orderTimers[order.id] = { timer10, timer30 };
+        },
+        
+        openCheckoutFullscreen() { if (this.cart.length === 0) { this.showToast("កន្ត្រកនៅទទេ"); return; } this.checkoutActive = true; this.currentStep = 1; this.startPaymentTimer(); this.errors = {}; },
+        closeCheckout() { this.checkoutActive = false; if (this.timerInterval) clearInterval(this.timerInterval); this.paymentTimer = "15:00"; },
+        startPaymentTimer() {
+          if (this.timerInterval) clearInterval(this.timerInterval);
+          let minutes = 15, seconds = 0;
+          this.timerInterval = setInterval(() => {
+            if (seconds === 0) { if (minutes === 0) clearInterval(this.timerInterval); else { minutes--; seconds = 59; } }
+            else seconds--;
+            this.paymentTimer = `${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
+          }, 1000);
+        },
+        validateField(field) {
+          const val = this.checkoutForm[field]?.trim();
+          if (field === 'name') this.errors.name = !val ? 'សូមបំពេញឈ្មោះពេញ' : '';
+          else if (field === 'phone') {
+            if (!val) this.errors.phone = 'សូមបំពេញលេខទូរស័ព្ទចាប់ផ្ដើម 0 និងយ៉ាងតិច ៨ខ្ទង់';
+            else if (!/^0\d{7,}$/.test(val)) this.errors.phone = 'លេខទូរស័ព្ទត្រូវចាប់ផ្ដើម 0 និងយ៉ាងតិច ៨ខ្ទង់';
+            else this.errors.phone = '';
+          }
+          else if (field === 'telegram') {
+            if (!val) this.errors.telegram = 'សូមបំពេញ Telegram ID ឬ @username';
+            else if (!val.startsWith('@')) this.errors.telegram = 'Telegram ID ត្រូវតែចាប់ផ្ដើមដោយ @';
+            else this.errors.telegram = '';
+          }
+          else if (field === 'address') {
+            if (!val) this.errors.address = 'សូមបំពេញអាសយដ្ឋានយ៉ាងតិច ១០តួអក្សរ';
+            else if (val.length < 10) this.errors.address = 'អាសយដ្ឋានត្រូវមានយ៉ាងតិច ១០តួអក្សរ';
+            else this.errors.address = '';
+          }
+        },
+        validateAndProceed() {
+          this.validateField('name'); this.validateField('phone'); this.validateField('telegram'); this.validateField('address');
+          if (!this.errors.name && !this.errors.phone && !this.errors.telegram && !this.errors.address) this.currentStep = 3;
+          else this.showToast(" សូមបំពេញព័ត៌មានឱ្យបានត្រឹមត្រូវ");
+        },
+        triggerUpload() { this.$refs.paymentInput.click(); },
+        handlePaymentUpload(e) {
+          const file = e.target.files[0];
+          if (file) { this.uploadedFile = file; this.uploadedFileName = file.name; const reader = new FileReader(); reader.onload = ev => { this.uploadPreview = ev.target.result; }; reader.readAsDataURL(file); this.showToast(" បានភ្ជាប់វិក្កយបត្រ"); }
+        },
+        async confirmPaymentAndSendTelegram() {
+          if (this.cart.length === 0) { this.showToast("កន្ត្រកទទេ"); return; }
+          if (!this.uploadedFile) { this.showToast("⚠️ សូមភ្ជាប់វិក្កយបត្របង់ប្រាក់"); return; }
+          this.isSendingOrder = true;
+          const orderNum = 'MINI' + Date.now();
+          const totalPaid = this.cartTotal;
+          this.lastOrderNumber = orderNum; this.lastOrderTotal = totalPaid; this.receiptName = this.checkoutForm.name;
+          
+          let itemsList = "";
+          this.cart.forEach((item, i) => { itemsList += `${i+1}. ${item.name} x${item.qty} = $${(item.price * item.qty).toFixed(2)}\n`; });
+          const message = `🧾 <b>NEW ORDER</b> #${orderNum}\n━━━━━━━━━━━━━━━━━━━━\n<b>👤 CUSTOMER</b>\nName: ${this.checkoutForm.name}\nPhone: ${this.checkoutForm.phone}\nTelegram: ${this.checkoutForm.telegram}\nAddress: ${this.checkoutForm.address}\nNote: ${this.checkoutForm.notes || '-'}\n━━━━━━━━━━━━━━━━━━━━\n<b>📦 ORDER DETAILS</b>\n${itemsList}\n━━━━━━━━━━━━━━━━━━━━\n<b>💰 TOTAL: $${totalPaid.toFixed(2)}</b>\n━━━━━━━━━━━━━━━━━━━━\n<b>Payment Slip Attached</b>\n⏱ ${new Date().toLocaleString()}`;
+          const formData = new FormData();
+          formData.append('chat_id', this.chatId);
+          formData.append('caption', message);
+          formData.append('parse_mode', 'HTML');
+          formData.append('photo', this.uploadedFile);
+          try {
+            const response = await fetch(`https://api.telegram.org/bot${this.botToken}/sendPhoto`, { method: 'POST', body: formData });
+            const result = await response.json();
+            if (result.ok) {
+              const newOrder = { id: Date.now(), orderNumber: orderNum, customerName: this.checkoutForm.name, phone: this.checkoutForm.phone, telegram: this.checkoutForm.telegram, address: this.checkoutForm.address, notes: this.checkoutForm.notes, orderDate: new Date().toISOString(), status: 'pending', totalAmount: totalPaid, totalItems: this.cart.length, items: this.cart.map(item => ({ name: item.name, price: item.price, qty: item.qty })), paymentSlip: this.uploadPreview };
+              let existingOrders = localStorage.getItem('mini_accessories_orders');
+              let orders = existingOrders ? JSON.parse(existingOrders) : [];
+              orders.push(newOrder);
+              localStorage.setItem('mini_accessories_orders', JSON.stringify(orders));
+              
+              // Start automatic status update timers
+              this.startOrderTimers(newOrder);
+              
+              this.showToast(" បានផ្ញើការបញ្ជាទិញ!");
+              this.currentStep = 4;
+              if (this.timerInterval) clearInterval(this.timerInterval);
+              this.cart = [];
+              this.checkoutForm = { name: '', phone: '', telegram: '', address: '', notes: '' };
+              this.uploadedFile = null; this.uploadedFileName = ''; this.uploadPreview = '';
+            } else { this.showToast("⚠️ កំហុសបច្ចេកទេស"); this.currentStep = 4; this.cart = []; }
+          } catch(err) { this.showToast("⚠️ បញ្ហាបណ្តាញ"); this.currentStep = 4; this.cart = []; }
+          finally { this.isSendingOrder = false; }
+        },
+        continueShoppingAfterOrder() { this.checkoutActive = false; this.currentStep = 1; if (this.timerInterval) clearInterval(this.timerInterval); this.paymentTimer = "15:00"; this.uploadedFile = null; this.uploadPreview = ''; this.showToast(" សូមអរគុណ!🙏"); }
+      },
+      mounted() { this.simulateLoading(); }
+    });
+  });
+</script>
+</body>
+</html>
